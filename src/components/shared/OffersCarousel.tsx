@@ -211,20 +211,20 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
 
                     {/* Offer Details */}
                     <div className="text-center md:text-left max-w-md">
-                      <h3 className="text-2xl md:text-3xl font-bold mb-3">
+                      <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3">
                         {offer.title[language] || offer.title.en}
                       </h3>
-                      <p className="text-lg opacity-90 mb-4 leading-relaxed">
+                      <p className="text-sm md:text-base lg:text-lg opacity-90 mb-3 md:mb-4 leading-relaxed">
                         {offer.description[language] || offer.description.en}
                       </p>
                       
-                      <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-4 text-sm">
-                        <div className="flex items-center bg-white bg-opacity-20 rounded-full px-3 py-1">
+                      <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm">
+                        <div className="flex items-center bg-white bg-opacity-20 rounded-full px-2 md:px-3 py-1">
                           <span className="font-medium">
                             {offer.validHours.start} - {offer.validHours.end}
                           </span>
                         </div>
-                        <div className="bg-yellow-400 text-gray-900 rounded-full px-4 py-1 font-bold">
+                        <div className="bg-yellow-400 text-gray-900 rounded-full px-3 md:px-4 py-1 font-bold">
                           {offer.discount}% {t('discount', { en: 'DISCOUNT', de: 'RABATT' })}
                         </div>
                       </div>
@@ -238,12 +238,12 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
 
         {/* Navigation Dots */}
         {!isCollapsed && validOffers.length > 1 && (
-          <div className="flex justify-center mt-8 space-x-2">
+          <div className="flex justify-center mt-6 md:mt-8 space-x-2">
             {validOffers.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
                   index === currentIndex
                     ? 'bg-white scale-125'
                     : 'bg-white bg-opacity-50 hover:bg-opacity-75'
@@ -255,18 +255,18 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
 
         {/* Mobile Navigation */}
         {!isCollapsed && validOffers.length > 1 && (
-          <div className="flex md:hidden justify-center mt-6 space-x-4">
+          <div className="flex md:hidden justify-center mt-4 md:mt-6 space-x-4">
             <button
               onClick={goToPrevious}
-              className="p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+              className="p-2 md:p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
             </button>
             <button
               onClick={goToNext}
-              className="p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+              className="p-2 md:p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
             </button>
           </div>
         )}
