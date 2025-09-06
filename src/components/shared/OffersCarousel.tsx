@@ -278,3 +278,5 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
 };
 
 export default OffersCarousel;
+
+export default OffersCarousel
