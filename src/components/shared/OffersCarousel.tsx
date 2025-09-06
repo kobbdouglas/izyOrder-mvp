@@ -213,70 +213,9 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
             </div>
 
             {/* Navigation Dots */}
-            {validOffers.length > 1 && (
-              <div className="flex justify-center mt-4 md:mt-6 space-x-2">
-                {validOffers.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
-                      index === currentIndex
-                        ? 'bg-white scale-125'
-                        : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
-
-            {/* Mobile Navigation */}
-            {validOffers.length > 1 && (
-              <div className="flex md:hidden justify-center mt-4 space-x-4">
-                <button
-                  onClick={goToPrevious}
-                  className="p-2 md:p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
-                >
-                  <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-                </button>
-                <button
-                  onClick={goToNext}
-                  className="p-2 md:p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
-                >
-                  <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-                </button>
-              </div>
-            )}
-          </>
-        )}
-                    : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-                }`}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Mobile Navigation */}
-        {!isCollapsed && validOffers.length > 1 && (
-          <div className="flex md:hidden justify-center mt-4 md:mt-6 space-x-4">
-            <button
-              onClick={goToPrevious}
-              className="p-2 md:p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
-            >
-              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-            <button
-              onClick={goToNext}
-              className="p-2 md:p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
-            >
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
 };
-
-export default OffersCarousel;
 
 export default OffersCarousel
