@@ -57,23 +57,34 @@
 
 /* Touch-friendly interactive elements */
 button, .cursor-pointer {
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 48px;
+  min-width: 48px;
 }
 
 /* Improved focus styles for accessibility */
 button:focus,
 input:focus,
 textarea:focus {
-  outline: 2px solid #f97316;
+  outline: 3px solid #f97316;
   outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
 }
 
 /* Smooth transitions for all interactive elements */
 * {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-duration: 150ms;
+  transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced shadows for better depth perception */
+.shadow-3xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Better text contrast for readability */
+.text-contrast-high {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Optimize carousel performance */

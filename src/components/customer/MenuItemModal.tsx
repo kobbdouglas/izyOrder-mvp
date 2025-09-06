@@ -42,22 +42,22 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, onClose }) => {
 
         {/* Content */}
         <div className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">
+          <div className="flex items-start justify-between mb-6">
+            <h2 className="text-3xl font-bold text-gray-900 leading-tight">
               {item.name[language] || item.name.en}
             </h2>
-            <span className="text-2xl font-bold text-orange-600">
+            <span className="text-3xl font-bold text-orange-600 ml-4">
               €{item.price.toFixed(2)}
             </span>
           </div>
 
-          <p className="text-gray-600 mb-6 leading-relaxed">
+          <p className="text-gray-700 text-lg mb-8 leading-relaxed">
             {item.description[language] || item.description.en}
           </p>
 
           {/* Dietary Information */}
-          <div className="mb-6">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+          <div className="mb-8">
+            <h3 className="text-base font-bold text-gray-800 mb-4">
               {t('dietaryInfo', { en: 'Dietary Information', de: 'Ernährungshinweise' })}
             </h3>
             <DietaryIcons item={item} showLabels />
@@ -65,28 +65,31 @@ const MenuItemModal: React.FC<MenuItemModalProps> = ({ item, onClose }) => {
 
           {/* Spice Level */}
           {item.dietaryInfo.spiceLevel > 0 && (
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">
+            <div className="mb-8">
+              <h3 className="text-base font-bold text-gray-800 mb-3">
                 {t('spiceLevel', { en: 'Spice Level', de: 'Schärfegrad' })}
               </h3>
-              <div className="flex space-x-1">
+              <div className="flex items-center space-x-2">
                 {[1, 2, 3].map((level) => (
                   <div
                     key={level}
-                    className={`w-4 h-4 rounded-full ${
+                    className={`w-6 h-6 rounded-full ${
                       level <= item.dietaryInfo.spiceLevel
                         ? 'bg-red-500'
                         : 'bg-gray-200'
                     }`}
                   />
                 ))}
+                <span className="ml-2 text-sm text-gray-600">
+                  ({item.dietaryInfo.spiceLevel}/3)
+                </span>
               </div>
             </div>
           )}
 
           <button
             onClick={onClose}
-            className="w-full bg-gray-900 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-200"
+            className="w-full bg-orange-500 text-white py-4 px-6 rounded-xl font-bold text-lg hover:bg-orange-600 transition-colors duration-200 shadow-lg"
           >
             {t('close', { en: 'Close', de: 'Schließen' })}
           </button>

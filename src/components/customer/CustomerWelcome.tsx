@@ -91,18 +91,18 @@ const CustomerWelcome: React.FC = () => {
         />
         <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
           <div className="text-center text-white px-4">
-            <h1 className="text-4xl font-bold mb-4">{restaurant.name}</h1>
-            <p className="text-lg mb-6 max-w-md">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">{restaurant.name}</h1>
+            <p className="text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed">
               {language === 'de' ? restaurant.description_de : restaurant.description_en}
             </p>
             {legacyRestaurant.customization?.welcomeText && (
-              <p className="text-base opacity-90 mb-8 max-w-lg">
+              <p className="text-lg md:text-xl opacity-90 mb-10 max-w-3xl leading-relaxed">
                 {legacyRestaurant.customization.welcomeText[language] || legacyRestaurant.customization.welcomeText.en}
               </p>
             )}
             <button
               onClick={handleViewMenu}
-              className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors flex items-center space-x-2 mx-auto"
+              className="bg-orange-500 text-white px-10 py-4 rounded-xl font-bold text-xl hover:bg-orange-600 transition-all duration-200 flex items-center space-x-3 mx-auto shadow-2xl hover:shadow-3xl transform hover:scale-105"
             >
               <span>{t('viewMenu', { en: 'View Menu', de: 'Speisekarte ansehen' })}</span>
               <ArrowRight className="w-5 h-5" />

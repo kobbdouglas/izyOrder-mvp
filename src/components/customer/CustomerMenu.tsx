@@ -117,18 +117,23 @@ const CustomerMenu: React.FC = () => {
 
       {/* Category Navigation */}
       <div className="bg-white border-b sticky top-16 z-30">
-        <div className="flex overflow-x-auto scrollbar-hide px-4 py-3 space-x-4">
+        <div className="flex overflow-x-auto scrollbar-hide px-4 py-4 space-x-3">
           {restaurant.menu_categories.map((category: any) => (
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors whitespace-nowrap ${
+              className={`flex-shrink-0 px-5 py-3 rounded-full font-semibold transition-all duration-200 whitespace-nowrap relative ${
                 activeCategory === category.id
-                  ? 'bg-orange-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-orange-500 text-white shadow-lg transform scale-105'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md'
               }`}
             >
-              {language === 'de' ? category.name_de : category.name_en}
+              <span className="block text-sm">
+                {language === 'de' ? category.name_de : category.name_en}
+              </span>
+              <span className="block text-xs opacity-75 mt-0.5">
+                {category.menu_items.length}
+              </span>
             </button>
           ))}
         </div>
@@ -140,9 +145,14 @@ const CustomerMenu: React.FC = () => {
           .filter((category: any) => category.id === activeCategory)
           .map((category: any) => (
             <div key={category.id}>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 {language === 'de' ? category.name_de : category.name_en}
-              </h2>
+                </h2>
+                <p className="text-sm text-gray-500">
+                  {category.menu_items.length} {t('items', { en: 'items', de: 'Artikel' })}
+                </p>
+              </div>
               <div className="space-y-4">
                 {category.menu_items.map((dbItem: any) => {
                   const item = convertMenuItem(dbItem);
@@ -150,36 +160,48 @@ const CustomerMenu: React.FC = () => {
                     <div
                       key={item.id}
                       onClick={() => setSelectedItem(item)}
-                      className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer transform hover:scale-[1.02] ${
+                      className={`bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer ${
                         item.soldOut ? 'opacity-60' : ''
                       }`}
                     >
-                      <div className="flex">
-                        <div className="flex-1 p-4">
-                          <div className="flex items-start justify-between mb-2">
-                            <h3 className="font-semibold text-gray-900 text-lg">
+                      <div className="flex p-4">
+                        <div className="flex-1 pr-4">
+                          <div className="flex items-start justify-between mb-3">
+                            <h3 className="font-bold text-gray-900 text-xl leading-tight">
                               {item.name[language] || item.name.en}
                               {item.soldOut && (
-                                <span className="ml-2 text-sm text-red-500 font-normal">
+                                <span className="block text-sm text-red-500 font-medium mt-1">
                                   ({t('soldOut', { en: 'Sold Out', de: 'Ausverkauft' })})
                                 </span>
                               )}
                             </h3>
-                            <span className="text-orange-600 font-bold text-lg">
+                            <span className="text-orange-600 font-bold text-2xl ml-3 flex-shrink-0">
                               €{item.price.toFixed(2)}
                             </span>
                           </div>
-                          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                          <p className="text-gray-600 text-base mb-4 line-clamp-2 leading-relaxed">
                             {item.description[language] || item.description.en}
                           </p>
-                          <DietaryIcons item={item} />
+                          <div className="flex items-center justify-between">
+                            <DietaryIcons item={item} />
+                            <button className="text-orange-600 text-sm font-medium hover:text-orange-700 transition-colors">
+                              {t('viewDetails', { en: 'View Details', de: 'Details ansehen' })}
+                            </button>
+                          </div>
                         </div>
-                        <div className="w-24 h-24 flex-shrink-0">
+                        <div className="w-32 h-32 flex-shrink-0 relative">
                           <img
                             src={item.image}
                             alt={item.name[language] || item.name.en}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover rounded-lg"
                           />
+                          {item.soldOut && (
+                            <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
+                              <span className="text-white text-xs font-bold px-2 py-1 bg-red-500 rounded">
+                                {t('soldOut', { en: 'SOLD OUT', de: 'AUSVERKAUFT' })}
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

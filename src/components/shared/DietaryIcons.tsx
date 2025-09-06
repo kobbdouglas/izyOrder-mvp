@@ -50,17 +50,17 @@ const DietaryIcons: React.FC<DietaryIconsProps> = ({ item, showLabels = false })
   if (icons.length === 0) return null;
 
   return (
-    <div className={`flex ${showLabels ? 'flex-col space-y-2' : 'space-x-2'}`}>
+    <div className={`flex ${showLabels ? 'flex-col space-y-2' : 'space-x-1'}`}>
       {icons.map((iconData, index) => (
         <div
           key={index}
           className={`flex items-center ${showLabels ? 'justify-start' : 'justify-center'} ${
-            showLabels ? 'p-2 rounded-lg' : 'p-1 rounded-full'
+            showLabels ? 'p-2 rounded-lg' : 'p-1.5 rounded-full'
           } ${iconData.color}`}
         >
           {iconData.icon}
           {showLabels && (
-            <span className="ml-2 text-sm font-medium">{iconData.label}</span>
+            <span className="ml-2 text-sm font-semibold">{iconData.label}</span>
           )}
         </div>
       ))}

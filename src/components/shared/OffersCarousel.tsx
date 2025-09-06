@@ -138,15 +138,15 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
   };
 
   return (
-    <div className={`bg-gradient-to-r from-orange-500 to-red-500 text-white transition-all duration-300 ${
+    <div className={`bg-gradient-to-r from-orange-400 to-red-400 text-white transition-all duration-300 ${
       sticky ? 'sticky top-16 z-20' : ''
-    } ${isCollapsed ? 'py-2' : 'py-3 md:py-4'} ${sticky && isMinimized ? 'transform -translate-y-full' : ''}`}>
+    } ${isCollapsed ? 'py-2' : 'py-4 md:py-6'} ${sticky && isMinimized ? 'transform -translate-y-full' : ''}`}>
       <div className="max-w-7xl mx-auto px-4">
         {/* Header with controls */}
-        <div className="flex items-center justify-between mb-3 md:mb-4">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <div className="flex items-center">
             <Star className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
-            <h2 className="text-lg md:text-xl font-bold">
+            <h2 className="text-xl md:text-2xl font-bold">
               {t('specialOffers', { en: 'Special Offers', de: 'Spezielle Angebote' })}
             </h2>
           </div>
