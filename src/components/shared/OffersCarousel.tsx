@@ -56,7 +56,7 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
     }, autoScrollInterval);
 
     return () => clearInterval(interval);
-  }, [autoScroll, autoScrollInterval, validOffers.length, isHovered]);
+  }, [autoScroll, autoScrollInterval, validOffers.length, isHovered, isCollapsed]);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
@@ -178,99 +178,97 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
 
         {/* Expanded State - Full Carousel */}
         {!isCollapsed && (
-          <>
+          <div 
+            className="relative overflow-hidden"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             <div 
-              className="relative overflow-hidden"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              <div 
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-              >
-                {validOffers.map((offer, index) => (
-                  <div key={offer.id} className="w-full flex-shrink-0">
-                    <div className="flex flex-col md:flex-row items-center justify-center space-y-3 md:space-y-0 md:space-x-4 px-2 md:px-4">
-                      {/* Circular Image - Responsive sizing */}
-                      <div className="relative">
-                        <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-2xl border-2 md:border-4 border-white border-opacity-30">
-                          <img
-                            src={getOfferImage(index)}
-                            alt={offer.title[language] || offer.title.en}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        
-                        {/* Special Offer Badge - Responsive sizing */}
-                        <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-yellow-400 text-gray-900 rounded-full w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center shadow-lg">
-                          <div className="text-center">
-                            <div className="text-xs md:text-sm lg:text-lg font-bold">{offer.discount}%</div>
-                            <div className="text-xs font-medium hidden lg:block">OFF</div>
-                          </div>
+              {validOffers.map((offer, index) => (
+                <div key={offer.id} className="w-full flex-shrink-0">
+                  <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 px-2 md:px-4">
+                    {/* Circular Image - Responsive sizing */}
+                    <div className="relative">
+                      <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-2xl border-2 md:border-4 border-white border-opacity-30">
+                        <img
+                          src={getOfferImage(index)}
+                          alt={offer.title[language] || offer.title.en}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      
+                      {/* Special Offer Badge - Responsive sizing */}
+                      <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-yellow-400 text-gray-900 rounded-full w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center shadow-lg">
+                        <div className="text-center">
+                          <div className="text-xs md:text-sm lg:text-lg font-bold">{offer.discount}%</div>
+                          <div className="text-xs font-medium hidden md:block">OFF</div>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Offer Details - Responsive sizing */}
-                      <div className="text-center md:text-left max-w-md">
-                        <h3 className="text-lg md:text-xl lg:text-2xl font-bold mb-2">
-                          {offer.title[language] || offer.title.en}
-                        </h3>
-                        <p className="text-sm md:text-base opacity-90 mb-3 leading-relaxed">
-                          {offer.description[language] || offer.description.en}
-                        </p>
-                        
-                        <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-3 text-xs md:text-sm">
-                          <div className="flex items-center bg-white bg-opacity-20 rounded-full px-2 md:px-3 py-1">
-                            <span className="font-medium">
-                              {offer.validHours.start} - {offer.validHours.end}
-                            </span>
-                          </div>
-                          <div className="bg-yellow-400 text-gray-900 rounded-full px-3 md:px-4 py-1 font-bold">
-                            {offer.discount}% {t('discount', { en: 'OFF', de: 'RABATT' })}
-                          </div>
+                    {/* Offer Details */}
+                    <div className="text-center md:text-left max-w-md">
+                      <h3 className="text-2xl md:text-3xl font-bold mb-3">
+                        {offer.title[language] || offer.title.en}
+                      </h3>
+                      <p className="text-lg opacity-90 mb-4 leading-relaxed">
+                        {offer.description[language] || offer.description.en}
+                      </p>
+                      
+                      <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-4 text-sm">
+                        <div className="flex items-center bg-white bg-opacity-20 rounded-full px-3 py-1">
+                          <span className="font-medium">
+                            {offer.validHours.start} - {offer.validHours.end}
+                          </span>
+                        </div>
+                        <div className="bg-yellow-400 text-gray-900 rounded-full px-4 py-1 font-bold">
+                          {offer.discount}% {t('discount', { en: 'DISCOUNT', de: 'RABATT' })}
                         </div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
+          </div>
+        )}
 
-            {/* Navigation Dots */}
-            {validOffers.length > 1 && (
-              <div className="flex justify-center mt-4 md:mt-6 space-x-2">
-                {validOffers.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
-                      index === currentIndex
-                        ? 'bg-white scale-125'
-                        : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
+        {/* Navigation Dots */}
+        {!isCollapsed && validOffers.length > 1 && (
+          <div className="flex justify-center mt-8 space-x-2">
+            {validOffers.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? 'bg-white scale-125'
+                    : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                }`}
+              />
+            ))}
+          </div>
+        )}
 
-            {/* Mobile Navigation */}
-            {validOffers.length > 1 && (
-              <div className="flex md:hidden justify-center mt-4 space-x-4">
-                <button
-                  onClick={goToPrevious}
-                  className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={goToNext}
-                  className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            )}
-          </>
+        {/* Mobile Navigation */}
+        {!isCollapsed && validOffers.length > 1 && (
+          <div className="flex md:hidden justify-center mt-6 space-x-4">
+            <button
+              onClick={goToPrevious}
+              className="p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={goToNext}
+              className="p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
         )}
       </div>
     </div>
