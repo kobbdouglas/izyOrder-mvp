@@ -152,100 +152,102 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
           </div>
         </div>
 
-        {/* Collapsed State - Mini Preview */}
-        {isCollapsed && (
-          <div className="flex items-center space-x-4 py-2">
-            <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-              <img
-                src={getOfferImage(currentIndex)}
-                alt="Special Offer"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm truncate">
-                {validOffers[currentIndex].title[language] || validOffers[currentIndex].title.en}
-              </h3>
-              <p className="text-xs opacity-75 truncate">
-                {validOffers[currentIndex].description[language] || validOffers[currentIndex].description.en}
-              </p>
-            </div>
-            <div className="bg-yellow-400 text-gray-900 rounded-full px-3 py-1 text-sm font-bold flex-shrink-0">
-              {validOffers[currentIndex].discount}% OFF
-            </div>
-          </div>
-        )}
-
         {/* Expanded State - Full Carousel */}
         {!isCollapsed && (
-          <div 
-            className="relative overflow-hidden"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
+          <>
             <div 
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              className="relative overflow-hidden"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
             >
-              {validOffers.map((offer, index) => (
-                <div key={offer.id} className="w-full flex-shrink-0">
-                  <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 px-2 md:px-4">
-                    {/* Circular Image - Responsive sizing */}
-                    <div className="relative">
-                      <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-2xl border-2 md:border-4 border-white border-opacity-30">
-                        <img
-                          src={getOfferImage(index)}
-                          alt={offer.title[language] || offer.title.en}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      
-                      {/* Special Offer Badge - Responsive sizing */}
-                      <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-yellow-400 text-gray-900 rounded-full w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center shadow-lg">
-                        <div className="text-center">
-                          <div className="text-xs md:text-sm lg:text-lg font-bold">{offer.discount}%</div>
-                          <div className="text-xs font-medium hidden md:block">OFF</div>
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              >
+                {validOffers.map((offer, index) => (
+                  <div key={offer.id} className="w-full flex-shrink-0">
+                    <div className="flex flex-col md:flex-row items-center justify-center space-y-3 md:space-y-0 md:space-x-4 lg:space-x-6 px-2 md:px-4">
+                      {/* Circular Image - Responsive sizing */}
+                      <div className="relative">
+                        <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-2xl border-2 md:border-4 border-white border-opacity-30">
+                          <img
+                            src={getOfferImage(index)}
+                            alt={offer.title[language] || offer.title.en}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        
+                        {/* Special Offer Badge - Responsive sizing */}
+                        <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-yellow-400 text-gray-900 rounded-full w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 flex items-center justify-center shadow-lg">
+                          <div className="text-center">
+                            <div className="text-xs md:text-sm lg:text-base font-bold">{offer.discount}%</div>
+                            <div className="text-xs font-medium hidden lg:block">OFF</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Offer Details */}
-                    <div className="text-center md:text-left max-w-md">
-                      <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3">
-                        {offer.title[language] || offer.title.en}
-                      </h3>
-                      <p className="text-sm md:text-base lg:text-lg opacity-90 mb-3 md:mb-4 leading-relaxed">
-                        {offer.description[language] || offer.description.en}
-                      </p>
-                      
-                      <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm">
-                        <div className="flex items-center bg-white bg-opacity-20 rounded-full px-2 md:px-3 py-1">
-                          <span className="font-medium">
-                            {offer.validHours.start} - {offer.validHours.end}
-                          </span>
-                        </div>
-                        <div className="bg-yellow-400 text-gray-900 rounded-full px-3 md:px-4 py-1 font-bold">
-                          {offer.discount}% {t('discount', { en: 'DISCOUNT', de: 'RABATT' })}
+                      {/* Offer Details */}
+                      <div className="text-center md:text-left max-w-md">
+                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3">
+                          {offer.title[language] || offer.title.en}
+                        </h3>
+                        <p className="text-sm md:text-base lg:text-lg opacity-90 mb-3 md:mb-4 leading-relaxed">
+                          {offer.description[language] || offer.description.en}
+                        </p>
+                        
+                        <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm">
+                          <div className="flex items-center bg-white bg-opacity-20 rounded-full px-3 py-1">
+                            <span className="font-medium">
+                              {offer.validHours.start} - {offer.validHours.end}
+                            </span>
+                          </div>
+                          <div className="bg-yellow-400 text-gray-900 rounded-full px-3 md:px-4 py-1 font-bold">
+                            {offer.discount}% {t('discount', { en: 'DISCOUNT', de: 'RABATT' })}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* Navigation Dots */}
-        {!isCollapsed && validOffers.length > 1 && (
-          <div className="flex justify-center mt-6 md:mt-8 space-x-2">
-            {validOffers.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? 'bg-white scale-125'
+            {/* Navigation Dots */}
+            {validOffers.length > 1 && (
+              <div className="flex justify-center mt-4 md:mt-6 space-x-2">
+                {validOffers.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
+                      index === currentIndex
+                        ? 'bg-white scale-125'
+                        : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Mobile Navigation */}
+            {validOffers.length > 1 && (
+              <div className="flex md:hidden justify-center mt-4 space-x-4">
+                <button
+                  onClick={goToPrevious}
+                  className="p-2 md:p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+                >
+                  <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+                </button>
+                <button
+                  onClick={goToNext}
+                  className="p-2 md:p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+                >
+                  <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
                     : 'bg-white bg-opacity-50 hover:bg-opacity-75'
                 }`}
               />

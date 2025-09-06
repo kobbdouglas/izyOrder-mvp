@@ -66,20 +66,26 @@ export const getRestaurantBySlug = async (slug: string) => {
 
 export const getUserRestaurant = async (userId: string) => {
   // Get current user first
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
-  
-  if (authError) {
-    console.error('Auth error:', authError);
-    return { success: false, error: 'Authentication failed' };
-  }
-  
-  if (!user) {
-    return { success: false, error: 'User not authenticated' };
-  }
-  
-  console.log('Current user ID:', user.id); // Debug log
-  
   try {
+    // Check if Supabase is properly configured
+    if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      console.warn('Supabase not configured');
+      return { success: false, error: 'Database not configured' };
+    }
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+  
+    if (authError) {
+      console.error('Auth error:', authError);
+      return { success: false, error: 'Authentication failed' };
+    }
+  
+    if (!user) {
+      return { success: false, error: 'User not authenticated' };
+    }
+  
+    console.log('Current user ID:', user.id); // Debug log
+  
     const { data, error } = await supabase
       .from('restaurants')
       .select(`
@@ -103,6 +109,11 @@ export const getUserRestaurant = async (userId: string) => {
     return { success: true, data };
   } catch (error) {
     console.error('Error fetching user restaurant:', error);
+    
+    // Handle network errors gracefully
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      return { success: false, error: 'Unable to connect to database. Please check your internet connection.' };
+    }
     return { success: false, error: error.message };
   }
 };

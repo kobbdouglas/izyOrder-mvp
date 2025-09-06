@@ -32,6 +32,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Get initial session
     const getInitialSession = async () => {
       try {
+        // Skip auth if Supabase not configured
+        if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+          console.warn('Supabase not configured, skipping auth initialization');
+          setLoading(false);
+          return;
+        }
+
         const currentUser = await getCurrentUser();
         setUser(currentUser);
       } catch (error) {
@@ -42,6 +49,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     getInitialSession();
+
+    // Skip auth listener if Supabase not configured
+    if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      return;
+    }
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(

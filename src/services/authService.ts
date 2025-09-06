@@ -54,6 +54,12 @@ export const signOut = async () => {
 
 export const getCurrentUser = async (): Promise<AuthUser | null> => {
   try {
+    // Check if Supabase is properly configured
+    if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      console.warn('Supabase not configured, skipping auth check');
+      return null;
+    }
+
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
@@ -66,6 +72,12 @@ export const getCurrentUser = async (): Promise<AuthUser | null> => {
     };
   } catch (error) {
     console.error('Error getting current user:', error);
+    
+    // Handle network errors gracefully
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      console.warn('Network error connecting to Supabase. Please check your internet connection and Supabase configuration.');
+      return null;
+    }
     
     // Handle invalid refresh token error by clearing stale session
     if (error instanceof Error && error.message.includes('Invalid Refresh Token')) {
