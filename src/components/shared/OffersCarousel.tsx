@@ -213,9 +213,26 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
             </div>
 
             {/* Navigation Dots */}
+            {validOffers.length > 1 && (
+              <div className="flex justify-center space-x-2 mt-4">
+                {validOffers.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all ${
+                      index === currentIndex 
+                        ? 'bg-white' 
+                        : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
 };
 
-export default OffersCarousel
+export default OffersCarousel;
