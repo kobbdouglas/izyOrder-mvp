@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 interface Offer {
@@ -16,21 +16,38 @@ interface OffersCarouselProps {
   offers: Offer[];
   autoScroll?: boolean;
   autoScrollInterval?: number;
+  sticky?: boolean;
 }
 
 const OffersCarousel: React.FC<OffersCarouselProps> = ({ 
   offers, 
   autoScroll = true, 
-  autoScrollInterval = 4000 
+  autoScrollInterval = 3000,
+  sticky = false
 }) => {
   const { t, language } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const validOffers = offers.filter(offer => offer.active);
 
+  // Auto-minimize on scroll (for sticky mode)
   useEffect(() => {
-    if (!autoScroll || validOffers.length <= 1 || isHovered) return;
+    if (!sticky) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setIsMinimized(scrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [sticky]);
+
+  useEffect(() => {
+    if (!autoScroll || validOffers.length <= 1 || isHovered || isCollapsed) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => 
@@ -55,6 +72,32 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
 
   if (validOffers.length === 0) return null;
 
+  // Sticky minimized view
+  if (sticky && isMinimized) {
+    const currentOffer = validOffers[currentIndex];
+    return (
+      <div className="fixed top-16 left-0 right-0 z-30 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg">
+        <div className="flex items-center justify-between px-4 py-2">
+          <div className="flex items-center space-x-3">
+            <Star className="w-4 h-4" />
+            <div className="text-sm">
+              <span className="font-semibold">{currentOffer.title[language] || currentOffer.title.en}</span>
+              <span className="ml-2 bg-yellow-400 text-gray-900 px-2 py-0.5 rounded-full text-xs font-bold">
+                {currentOffer.discount}% OFF
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => setIsMinimized(false)}
+            className="p-1 hover:bg-white hover:bg-opacity-20 rounded"
+          >
+            <ChevronDown className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // Placeholder images for offers
   const getOfferImage = (index: number) => {
     const images = [
@@ -68,18 +111,103 @@ const OffersCarousel: React.FC<OffersCarouselProps> = ({
   };
 
   return (
-    <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-6">
+    <div className={`bg-gradient-to-r from-orange-500 to-red-500 text-white transition-all duration-300 ${
+      sticky ? 'sticky top-16 z-20' : ''
+    } ${isCollapsed ? 'py-2' : 'py-3 md:py-4'}`}>
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-3 md:mb-4">
           <div className="flex items-center">
-            <Star className="w-6 h-6 mr-2" />
-            <h2 className="text-xl font-bold">
+            <Star className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+            <h2 className="text-lg md:text-xl font-bold">
               {t('specialOffers', { en: 'Special Offers', de: 'Spezielle Angebote' })}
             </h2>
           </div>
           
-          {validOffers.length > 1 && (
-            <div className="hidden md:flex items-center space-x-2">
+          <div className="flex items-center space-x-2">
+            {/* Collapse/Expand Button */}
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-1 md:p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+            >
+              {isCollapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
+            </button>
+            
+            {/* Navigation arrows - only show when expanded and multiple offers */}
+            {!isCollapsed && validOffers.length > 1 && (
+              <div className="hidden md:flex items-center space-x-2">
+                <button
+                  onClick={goToPrevious}
+                  className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={goToNext}
+                  className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Collapsed State - Mini Preview */}
+        {isCollapsed && (
+          <div className="flex items-center space-x-4 py-2">
+            <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+              <img
+                src={getOfferImage(currentIndex)}
+                alt="Special Offer"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-sm truncate">
+                {validOffers[currentIndex].title[language] || validOffers[currentIndex].title.en}
+              </h3>
+              <p className="text-xs opacity-75 truncate">
+                {validOffers[currentIndex].description[language] || validOffers[currentIndex].description.en}
+              </p>
+            </div>
+            <div className="bg-yellow-400 text-gray-900 rounded-full px-3 py-1 text-sm font-bold flex-shrink-0">
+              {validOffers[currentIndex].discount}% OFF
+            </div>
+          </div>
+        )}
+
+        {/* Expanded State - Full Carousel */}
+        {!isCollapsed && (
+          <div 
+            className="relative overflow-hidden"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <div 
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {validOffers.map((offer, index) => (
+                <div key={offer.id} className="w-full flex-shrink-0">
+                  <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 px-2 md:px-4">
+                    {/* Circular Image - Responsive sizing */}
+                    <div className="relative">
+                      <div className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden shadow-2xl border-2 md:border-4 border-white border-opacity-30">
+                        <img
+                          src={getOfferImage(index)}
+                          alt={offer.title[language] || offer.title.en}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      
+                      {/* Special Offer Badge - Responsive sizing */}
+                      <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-yellow-400 text-gray-900 rounded-full w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center shadow-lg">
+                        <div className="text-center">
+                          <div className="text-xs md:text-sm lg:text-lg font-bold">{offer.discount}%</div>
+                          <div className="text-xs font-medium hidden md:block">OFF</div>
+                        </div>
+                      </div>
+                    </div>
               <button
                 onClick={goToPrevious}
                 className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all"

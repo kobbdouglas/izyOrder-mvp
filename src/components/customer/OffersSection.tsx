@@ -11,7 +11,7 @@ const OffersSection: React.FC<OffersSectionProps> = ({ restaurant }) => {
   if (validOffers.length === 0) return null;
 
   return (
-    <OffersCarousel offers={validOffers} />
+    <OffersCarousel offers={validOffers} sticky={true} />
   );
 };
 
