@@ -20,6 +20,13 @@
   overflow: hidden;
 }
 
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* Animation utilities */
 @keyframes slide-in-from-bottom {
   from {
@@ -67,4 +74,36 @@ textarea:focus {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Optimize carousel performance */
+.offers-carousel {
+  contain: layout style paint;
+}
+
+.offers-carousel * {
+  will-change: auto;
+}
+
+/* Prevent layout shifts */
+.offers-carousel img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .offers-carousel * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
