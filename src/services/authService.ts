@@ -66,6 +66,16 @@ export const getCurrentUser = async (): Promise<AuthUser | null> => {
     };
   } catch (error) {
     console.error('Error getting current user:', error);
+    
+    // Handle invalid refresh token error by clearing stale session
+    if (error instanceof Error && error.message.includes('Invalid Refresh Token')) {
+      try {
+        await supabase.auth.signOut();
+      } catch (signOutError) {
+        console.error('Error signing out after invalid refresh token:', signOutError);
+      }
+    }
+    
     return null;
   }
 };
